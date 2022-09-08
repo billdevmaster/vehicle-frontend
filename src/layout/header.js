@@ -72,7 +72,7 @@ const Header = () => {
       }
     }
     fetchData();
-  }, [userAddress]);
+  }, [web3, userAddress]);
 
   return (
     <HeaderStyle>
