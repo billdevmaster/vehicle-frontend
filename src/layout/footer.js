@@ -9,7 +9,7 @@ const Footer = () => {
     <FooterStyle>
       <footer> 
         <Container>
-          <p className="text-center text-white">Copyright © 2021 Krypto Gangsters. All rights reserved.</p>
+          <p className="text-center text-white">Copyright © 2022 Vehicle App created by Bill</p>
         </Container>
       </footer>
     </FooterStyle>

@@ -14,10 +14,8 @@ import {
 } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { CHAIN_ID } from '../constants/constants';
-import { getUserBusdBalance } from '../interface/web3Interface';
 
-import { FaTwitter, FaTelegram, FaList } from "react-icons/fa";
-import { faWallet } from '@fortawesome/free-solid-svg-icons'
+import { FaList } from "react-icons/fa";
 import { HeaderStyle } from './style';
 
 const Header = () => {
@@ -39,14 +37,14 @@ const Header = () => {
         package: WalletConnectProvider,
         options: {
           rpc: {
-            1: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
+            1: `https://mainnet.infura.io/v3/${process.env.ROPSTEN_INFURA_API_KEY}`
           },
-          chainId: 1
+          chainId: 3
         }
       }
     };
     const web3Modal = new Web3Modal({
-      network: "mainnet", // optional
+      network: "ropesten", // optional
       cacheProvider: true, // optional
       providerOptions // required
     });
@@ -63,14 +61,17 @@ const Header = () => {
     setShowAddress(accounts[0].substr(0, 4) + "..." + accounts[0].substr(accounts[0].length - 3, accounts[0].length));
   }
 
-  useEffect(async () => {
-    if (userAddress !== '') {
-      setShowAddress(userAddress.substr(0, 4) + "..." + userAddress.substr(userAddress.length - 3))
-      const chainId = await web3.eth.getChainId();
-      if (chainId !== CHAIN_ID) {
-        toast.warning("Please switch to ETH network");
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userAddress !== '') {
+        setShowAddress(userAddress.substr(0, 4) + "..." + userAddress.substr(userAddress.length - 3))
+        const chainId = await web3.eth.getChainId();
+        if (chainId !== CHAIN_ID) {
+          toast.warning("Please switch to ETH network");
+        }
       }
     }
+    fetchData();
   }, [userAddress]);
 
   return (

@@ -11,3 +11,11 @@
     src: local("Grifter"),
     url("./assets/fonts/GRIFTER™Bold.otf") format("truetype");
 }
+
+.content {
+    min-height: calc(100vh - 130px);
+}
+
+.card-header {
+    background-color: #333;
+}
