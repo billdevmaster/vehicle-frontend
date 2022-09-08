@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Input, Button, Card, CardBody, CardHeader, CardText } from 'reactstrap';
+import { Row, Col, Input, Button, Card, CardBody, CardHeader } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import Web3 from 'web3';
 import { ContractAddr, ContractAbi } from '../constants/contract';
