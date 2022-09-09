@@ -12,6 +12,8 @@ const ListVehicle = () => {
     }
   });
 	const [keyword, setKeyword] = useState("");
+	const [loading, setLoading] = useState(false);
+
 	const [data, setData] = useState({
 		name: "",
 		make: "",
@@ -28,6 +30,7 @@ const ListVehicle = () => {
       toast.warning(`Vehicle: Please connect wallet`);
       return;
     }
+		setLoading(true)
 		const contract = new web3.eth.Contract(
       ContractAbi,
       ContractAddr
@@ -35,14 +38,17 @@ const ListVehicle = () => {
 		const index = await contract.methods.VINToVehicle(keyword).call();
 		if (index === 0) {
 			toast.warning("Vehicle: This VIN is not registered");
+			setLoading(false)
 			return;
 		}
 		const vehicle = await contract.methods.vehicles(index).call();
 		setData({name: vehicle.name, make: vehicle.make, model: vehicle.model, color: vehicle.color});
+		setLoading(false)
 	}
+
 	return (
 		<>
-			<Card className='mt-5'>
+			<Card className='mt-5 mb-5'>
         <CardHeader>
           <h3 className='text-white'>Explorer Vehicle</h3>
         </CardHeader>
@@ -52,7 +58,9 @@ const ListVehicle = () => {
 		          <Input value={keyword} onChange={e => {setKeyword(e.target.value)}} placeholder="Input VIN"/>
 						</Col>
 						<Col md={6}>
-							<Button color="info" onClick={searchVehicle}>Search</Button>
+							<Button color="info" onClick={searchVehicle}>
+								{loading ? `Searching...` : `Search`}
+							</Button>
 						</Col>
 					</Row>
 					<Row className="mt-2">

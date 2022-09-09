@@ -11,6 +11,7 @@ const AddNewVehicle = () => {
       userAddress: state.userAddress,
     }
   });
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     VIN: "",
     name: "",
@@ -25,19 +26,26 @@ const AddNewVehicle = () => {
       return;
     }
 
+    if (data.VIN.trim() === '' || data.name.trim() === '' || data.make.trim() === '' || data.model.trim() === '' || data.color.trim() === '') {
+      toast.warning(`Vehicle: Please fill inputs correctly`);
+      return;
+    }
+
     const contract = new web3.eth.Contract(
       ContractAbi,
       ContractAddr
     );
+    setLoading(true)
 
     try {
       const buyStatus = await contract.methods.addVehicle(data.VIN, data.name, data.make, data.model, data.color).send({from: userAddress});
       if (buyStatus.status) {
+        setLoading(false)
         toast("Vehicle: Added New Vehicle Successfully");
       }
     } catch (e) {
       toast.error(e.message)
-      console.log(e)
+      setLoading(false)
     }
   }
 
@@ -118,7 +126,9 @@ const AddNewVehicle = () => {
             </Col>
 
             <Col md={6}>
-              <Button onClick={addNewVehicle} className="mt-4" color="info">Add New Vehicle</Button>
+              <Button onClick={addNewVehicle} className="mt-4" color="info">
+                {loading ? `Adding...` : `Add New Vehicle`}
+              </Button>
             </Col>
           </Row>
         </CardBody>

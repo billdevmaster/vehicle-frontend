@@ -13,6 +13,7 @@ const AddServiceWorker = () => {
     }
   });
   const [account, setAccount] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const addServiceWorker = async () => {
     if (!userAddress) {
@@ -23,6 +24,7 @@ const AddServiceWorker = () => {
       toast.warning(`Vehicle: Please input valid address`);
       return;
     }
+    setLoading(true);
 
     const contract = new web3.eth.Contract(
       ContractAbi,
@@ -32,11 +34,12 @@ const AddServiceWorker = () => {
     try {
       const buyStatus = await contract.methods.setServiceWorker(account).send({from: userAddress});
       if (buyStatus.status) {
+        setLoading(false);
         toast("Vehicle: Added New Service Worker Successfully");
       }
     } catch (e) {
       toast.error(e.message)
-      console.log(e)
+      setLoading(false);
     }
   }
 
@@ -53,7 +56,9 @@ const AddServiceWorker = () => {
             </Col>
 
             <Col md={6}>
-              <Button onClick={addServiceWorker} color="info">Add New Service Worker</Button>
+              <Button onClick={addServiceWorker} color="info">
+                {loading ? `Adding...` : `Add New Service Worker`}
+              </Button>
             </Col>
           </Row>
         </CardBody>
